@@ -33,7 +33,7 @@ Die veröffentlichte Website in **Safari** öffnen, auf **Teilen** tippen und **
 - `index.html`: Bedienoberfläche
 - `style.css`: Mobile-First-Design
 - `app.js`: Generator, Eindeutigkeitsprüfung und Spiellogik
-- `icon.svg`, `manifest.webmanifest`: Web-App-Icon und Metadaten
+- `icon.svg`, `apple-touch-icon.png`, `manifest.webmanifest`: Web-App-Icon und Metadaten
 - `sw.js`: Cache für die Offline-Nutzung
 
 Der Spielstand bleibt lokal im Browser gespeichert, nicht bei GitHub.
