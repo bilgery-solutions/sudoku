@@ -1,4 +1,4 @@
-const CACHE_NAME = "sudoku-pages-v2";
+const CACHE_NAME = "sudoku-pages-v3";
 const ASSETS = ["./", "./index.html", "./style.css", "./app.js", "./icon.svg", "./apple-touch-icon.png", "./manifest.webmanifest"];
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
