@@ -9,7 +9,8 @@ Eine moderne, minimalistische **Sudoku-Webapp auf Deutsch**, optimiert für iPho
 - Jedes Rätsel wird mit einem Sudoku-Solver auf **genau eine Lösung** geprüft
 - Interaktives 9×9-Spielfeld mit Hervorhebung von Zeilen, Spalten, Boxen und gleichen Zahlen
 - Zahlenfeld, Notizen, Hinweise, Löschen, Rückgängig, Fehlerkennzeichnung
-- Timer, Pause und Abschlussdialog
+- Optionaler Timer: startet erst nach Klick auf **Timer starten**; anschließend Pause/Fortsetzen möglich
+- Dezenter Link zu Bilgery Solutions im Footer und Abschlussdialog
 - Automatischer Spielstand im lokalen Speicher des Geräts
 - Responsives Layout, Service Worker für Offline-Nutzung nach dem ersten Laden
 - Als Web-App zum iPhone-Home-Bildschirm hinzufügbar
