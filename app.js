@@ -593,6 +593,7 @@
   game = restoreGame();
   if (game) {
     render();
+    safeSave(); // Vorhandene Spielstände auf das optionale Timer-Format migrieren.
     setFeedback(game.completed ? "Geschafft! Starte ein neues Rätsel." : "");
   } else {
     startGame("easy");
