@@ -173,12 +173,15 @@
       if (!saved.board.every((v, i) => Number.isInteger(v) && v >= 0 && v <= 9 && (!saved.puzzle[i] || saved.puzzle[i] === v))) return null;
       if (!saved.notes.every(v => Number.isInteger(v) && v >= 0 && v <= ALL)) return null;
       saved.history = Array.isArray(saved.history) ? saved.history.slice(-80) : [];
-      saved.seconds = Math.max(0, Number(saved.seconds) || 0);
+      // Ältere Spielstände hatten einen automatisch laufenden Timer.
+      // Beim Umstieg bleibt der Timer für diese Rätsel ebenfalls ausgeschaltet.
+      saved.timerEnabled = saved.timerEnabled === true;
+      saved.seconds = saved.timerEnabled ? Math.max(0, Number(saved.seconds) || 0) : 0;
       saved.selected = Number.isInteger(saved.selected) && saved.selected >= 0 && saved.selected < 81 ? saved.selected : -1;
       saved.mistakes = Math.max(0, Number(saved.mistakes) || 0);
       saved.hintsUsed = Math.max(0, Number(saved.hintsUsed) || 0);
       saved.pencil = !!saved.pencil;
-      saved.paused = !!saved.paused;
+      saved.paused = saved.timerEnabled && !!saved.paused;
       saved.completed = !!saved.completed;
       return saved;
     } catch (_) { return null; }
@@ -208,7 +211,11 @@
   }
 
   function updateClock() {
-    document.getElementById("timer").textContent = formatTime(game ? game.seconds : 0);
+    const enabled = !!game && !!game.timerEnabled;
+    document.getElementById("timer").textContent = enabled ? formatTime(game.seconds) : "Timer starten";
+    const timerButton = document.getElementById("pause-button");
+    timerButton.classList.toggle("timer-start", !enabled);
+    timerButton.querySelector(".timer-pause").hidden = !enabled;
   }
 
   function updateControls() {
@@ -242,7 +249,8 @@
       document.getElementById("level-label").textContent = LABELS[game.level].toUpperCase();
       document.getElementById("progress").textContent = game.board.filter(Boolean).length + " / 81";
     }
-    document.getElementById("pause-button").setAttribute("aria-label", game && game.paused ? "Spiel fortsetzen" : "Spiel pausieren");
+    document.getElementById("pause-button").setAttribute("aria-label",
+      !game || !game.timerEnabled ? "Timer starten" : game.paused ? "Spiel fortsetzen" : "Spiel pausieren");
     updateClock();
   }
 
@@ -338,8 +346,8 @@
     game.paused = false;
     setFeedback("Perfekt! Du hast alle Felder richtig ausgefüllt.", "success");
     document.getElementById("win-summary").textContent = LABELS[game.level] +
-      " · " + formatTime(game.seconds) + " · " + game.mistakes +
-      (game.mistakes === 1 ? " Fehler" : " Fehler") +
+      (game.timerEnabled ? " · " + formatTime(game.seconds) : "") +
+      " · " + game.mistakes + " Fehler" +
       " · " + game.hintsUsed + (game.hintsUsed === 1 ? " Hinweis" : " Hinweise");
     winModal.hidden = false;
   }
@@ -347,7 +355,7 @@
   function placeDigit(digit) {
     if (!game || generating || game.paused || game.completed) return;
     const i = game.selected;
-    if (i < 0) { setFeedback("Wähle zuerst ein freies Feld."); return; }
+    if (i < 0) { setFeedback("Bitte ein freies Feld auswählen."); return; }
     if (game.puzzle[i]) { setFeedback("Diese Zahl ist vorgegeben und kann nicht verändert werden."); return; }
     if (game.pencil) {
       if (game.board[i]) { setFeedback("Lösche zuerst die eingetragene Zahl."); return; }
@@ -419,7 +427,13 @@
 
   function togglePause() {
     if (!game || generating || game.completed) return;
-    game.paused = !game.paused;
+    if (!game.timerEnabled) {
+      game.timerEnabled = true;
+      game.seconds = 0;
+      game.paused = false;
+    } else {
+      game.paused = !game.paused;
+    }
     render();
     safeSave();
   }
@@ -453,11 +467,12 @@
         mistakes: 0,
         hintsUsed: 0,
         seconds: 0,
+        timerEnabled: false,
         paused: false,
         completed: false,
         history: []
       };
-      setFeedback("Wähle ein Feld und tippe auf eine Zahl.");
+      setFeedback("");
     } catch (error) {
       console.error("Sudoku konnte nicht erzeugt werden:", error);
       setFeedback("Rätsel konnte nicht erstellt werden. Bitte erneut versuchen.", "error");
@@ -566,7 +581,7 @@
     window.addEventListener("pagehide", safeSave);
     document.addEventListener("visibilitychange", safeSave);
     setInterval(() => {
-      if (game && !game.paused && !game.completed && !generating && !document.hidden) {
+      if (game && game.timerEnabled && !game.paused && !game.completed && !generating && !document.hidden) {
         game.seconds++;
         updateClock();
         safeSave();
@@ -578,7 +593,7 @@
   game = restoreGame();
   if (game) {
     render();
-    setFeedback(game.completed ? "Geschafft! Starte ein neues Rätsel." : "Dein letztes Rätsel ist wieder da.");
+    setFeedback(game.completed ? "Geschafft! Starte ein neues Rätsel." : "");
   } else {
     startGame("easy");
   }
