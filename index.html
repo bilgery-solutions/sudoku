@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f8f9fc">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Sudoku">
+  <meta name="description" content="Sudoku in seiner schönsten Form. Unbegrenzt neue Rätsel, drei Schwierigkeitsgrade und ein ruhiges Design.">
+  <link rel="icon" type="image/svg+xml" href="./icon.svg">
+  <link rel="apple-touch-icon" href="./icon.svg">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./style.css">
+  <title>Sudoku — Dein Moment für Klarheit</title>
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <main class="shell">
+    <header class="masthead">
+      <div class="identity">
+        <p class="eyebrow">DEIN MOMENT FÜR KLARHEIT</p>
+        <h1>Sudoku<span class="brand-period">.</span></h1>
+      </div>
+      <button class="new-button" type="button" id="new-game" aria-label="Neues Sudoku starten">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        <span>Neu</span>
+      </button>
+    </header>
+
+    <nav class="levels" aria-label="Schwierigkeitsgrad">
+      <button type="button" class="level active" data-level="easy" aria-pressed="true">Leicht</button>
+      <button type="button" class="level" data-level="medium" aria-pressed="false">Mittel</button>
+      <button type="button" class="level" data-level="hard" aria-pressed="false">Schwer</button>
+    </nav>
+
+    <section class="game" aria-label="Sudoku spielen">
+      <div class="game-info">
+        <div class="game-label"><span id="level-label">LEICHT</span><span class="tiny-dot" aria-hidden="true"></span><span id="progress">0 / 81</span></div>
+        <button type="button" id="pause-button" class="timer-button" aria-label="Spiel pausieren">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+          <span id="timer">00:00</span>
+          <svg class="timer-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+        </button>
+      </div>
+
+      <div class="board-frame">
+        <div id="board" class="board" role="grid" aria-label="Sudoku-Spielfeld, 9 Zeilen und 9 Spalten" aria-busy="true"></div>
+        <div class="board-cover" id="board-cover">
+          <div class="cover-content">
+            <div class="cover-symbol" id="cover-symbol" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            </div>
+            <strong id="cover-title">Rätsel wird erstellt</strong>
+            <span id="cover-subtitle">Einen kleinen Moment …</span>
+            <button type="button" id="resume-button" class="resume-button" hidden>Fortsetzen</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tools" aria-label="Spielwerkzeuge">
+        <button type="button" class="tool" id="undo" aria-label="Letzten Zug rückgängig machen" disabled>
+          <span class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-2"/></svg></span>
+          <span>Zurück</span>
+        </button>
+        <button type="button" class="tool" id="erase" aria-label="Feld leeren">
+          <span class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m20 15-6 6H7L2.5 16.5a2.5 2.5 0 0 1 0-3.5L12 3.5a2.5 2.5 0 0 1 3.5 0l5 5a2.5 2.5 0 0 1 0 3.5L11.5 21"/><path d="m8 8 8 8"/></svg></span>
+          <span>Löschen</span>
+        </button>
+        <button type="button" class="tool" id="notes" aria-label="Notizmodus einschalten" aria-pressed="false">
+          <span class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 20 4.5-1 11-11a2.1 2.1 0 0 0-3-3l-11 11L4 20Z"/><path d="m14.5 7 3 3"/></svg><span class="notes-indicator" aria-hidden="true"></span></span>
+          <span>Notizen</span>
+        </button>
+        <button type="button" class="tool" id="hint" aria-label="Eine richtige Zahl als Hinweis eintragen">
+          <span class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4"/><path d="M8 14.5a7 7 0 1 1 8 0c-.8.7-1 1.7-1 2.5H9c0-.8-.2-1.8-1-2.5Z"/></svg></span>
+          <span>Hinweis</span>
+        </button>
+      </div>
+
+      <div id="numberpad" class="numberpad" role="group" aria-label="Zahl eingeben"></div>
+      <div class="feedback" id="feedback" role="status" aria-live="polite">Wähle ein Feld und tippe auf eine Zahl.</div>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="confirm-modal" hidden>
+    <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-text">
+      <div class="dialog-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></div>
+      <h2 id="confirm-title">Neues Rätsel?</h2>
+      <p id="confirm-text">Dein aktueller Spielfortschritt geht dabei verloren.</p>
+      <button type="button" class="primary-action" id="confirm-yes">Neues Rätsel starten</button>
+      <button type="button" class="secondary-action" id="confirm-no">Weiterspielen</button>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="win-modal" hidden>
+    <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="win-title">
+      <div class="trophy">✦</div>
+      <p class="dialog-overline">GESCHAFFT!</p>
+      <h2 id="win-title">Großartig gelöst.</h2>
+      <p id="win-summary">Du hast das Sudoku gelöst.</p>
+      <button type="button" class="primary-action" id="win-next">Nächstes Rätsel</button>
+      <button type="button" class="secondary-action" id="win-close">Spielfeld ansehen</button>
+    </section>
+  </div>
+</body>
+</html>
