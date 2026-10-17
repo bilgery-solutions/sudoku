@@ -355,7 +355,7 @@
   function placeDigit(digit) {
     if (!game || generating || game.paused || game.completed) return;
     const i = game.selected;
-    if (i < 0) { setFeedback("Bitte ein freies Feld auswählen."); return; }
+    if (i < 0) { setFeedback("Wähle zuerst ein freies Feld."); return; }
     if (game.puzzle[i]) { setFeedback("Diese Zahl ist vorgegeben und kann nicht verändert werden."); return; }
     if (game.pencil) {
       if (game.board[i]) { setFeedback("Lösche zuerst die eingetragene Zahl."); return; }
@@ -472,7 +472,7 @@
         completed: false,
         history: []
       };
-      setFeedback("");
+      setFeedback("Wähle ein Feld und tippe auf eine Zahl.");
     } catch (error) {
       console.error("Sudoku konnte nicht erzeugt werden:", error);
       setFeedback("Rätsel konnte nicht erstellt werden. Bitte erneut versuchen.", "error");
@@ -594,7 +594,7 @@
   if (game) {
     render();
     safeSave(); // Vorhandene Spielstände auf das optionale Timer-Format migrieren.
-    setFeedback(game.completed ? "Geschafft! Starte ein neues Rätsel." : "");
+    setFeedback(game.completed ? "Geschafft! Starte ein neues Rätsel." : "Dein letztes Rätsel ist wieder da.");
   } else {
     startGame("easy");
   }
