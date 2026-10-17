@@ -12,14 +12,13 @@
   <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="stylesheet" href="./style.css">
-  <title>Sudoku — Dein Moment für Klarheit</title>
+  <title>Sudoku</title>
   <script src="./app.js" defer></script>
 </head>
 <body>
   <main class="shell">
     <header class="masthead">
       <div class="identity">
-        <p class="eyebrow">DEIN MOMENT FÜR KLARHEIT</p>
         <h1>Sudoku<span class="brand-period">.</span></h1>
       </div>
       <button class="new-button" type="button" id="new-game" aria-label="Neues Sudoku starten">
@@ -37,10 +36,10 @@
     <section class="game" aria-label="Sudoku spielen">
       <div class="game-info">
         <div class="game-label"><span id="level-label">LEICHT</span><span class="tiny-dot" aria-hidden="true"></span><span id="progress">0 / 81</span></div>
-        <button type="button" id="pause-button" class="timer-button" aria-label="Spiel pausieren">
+        <button type="button" id="pause-button" class="timer-button timer-start" aria-label="Timer starten">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
-          <span id="timer">00:00</span>
-          <svg class="timer-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+          <span id="timer">Timer starten</span>
+          <svg class="timer-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" hidden><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
         </button>
       </div>
 
@@ -78,7 +77,10 @@
       </div>
 
       <div id="numberpad" class="numberpad" role="group" aria-label="Zahl eingeben"></div>
-      <div class="feedback" id="feedback" role="status" aria-live="polite">Wähle ein Feld und tippe auf eine Zahl.</div>
+      <footer class="brand-footer">
+        <a class="brand-signature" href="https://bilgery-solutions.de" target="_blank" rel="noopener noreferrer" aria-label="Website von Bilgery Solutions öffnen"><strong>bilgery</strong> <span>solutions</span></a>
+      </footer>
+      <div class="feedback visually-hidden" id="feedback" role="status" aria-live="polite"></div>
     </section>
   </main>
 
