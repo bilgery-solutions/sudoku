@@ -49,7 +49,7 @@
     const values = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]);
     const bandOrder = shuffle([0, 1, 2]);
     const stackOrder = shuffle([0, 1, 2]);
-    const rows = bandOrder.flatMap(band => shuffle([0, 1, 2]).map(r => b * 3 + r));
+    const rows = bandOrder.flatMap(band => shuffle([0, 1, 2]).map(r => band * 3 + r));
     const cols = stackOrder.flatMap(band => shuffle([0, 1, 2]).map(c => band * 3 + c));
     const transpose = Math.random() < .5;
     const result = [];
